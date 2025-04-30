@@ -1,18 +1,50 @@
 # Construção
 
-O projeto foi feito usando o framework **Next** para a criação do front-end, juntamente com a biblioteca **Shadcn** que contém os componentes do front-end pré-prontos.
-Para construir o back-end foi utilizado o **PHP** para a comunicação com o banco de dados.
+Aplicação full-stack que combina Next/React para o **front-end** e PHP para o **back-end**, visando demonstrar a comunicação em tempo real entre o cliente e o servidor de banco de dados.
 
-# Como funciona a comunicação?
+## Tecnologias e Dependências
 
-O front-end faz a requisição para o servidor embutido do PHP, que por sua vez faz a comunicação com o banco de dados.
-A cada 1 segundo o front-end faz uma requisição para o servidor para atualizar as informações do banco de dados.
-O front-end faz um cálculo para calcular a **média de registros inseridos no banco de dados no intervalo de 1 segundo.** <- *Irei Mudar*
+- **Front-end:**
+    - Framework: **Next.js**
+    - Biblioteca de componentes: **Shadcn**
+    - Dependências: **Node.js** (última versão)
 
-# Como rodar o projeto?
+- **Back-end:**
+    - Linguagem: **PHP**
+    - Servidor embutido para testes: `php -S`
+    - Conexão com banco de dados relacional (detalhes configuráveis no arquivo `./server/index.php`)
 
-1. Você precisa ter o **Node.js** instalado na sua máquina, além de ter o **PHP** instalado, ambos nas versões mais recentes.
-2. Verifique se a **base de dados** está configurada corretamente na sua máquina, ou seja, os nomes das tabelas e colunas estão corretos - Vou adicionar um arquivo .sql para facilitar a instalação da base.
-3. Mude o arquivo `./server/index.php` e coloque as informações de conexão com o banco de dados, tais como seu usuário e senha - na linha 21 em `./server/index.php`.
-4. No diretório **root** do projeto, rode o comando `npm install` para instalar as dependências do projeto,em seguida rode o comando `npm run dev` para iniciar o servidor NodeJS.
-5. Em seguida, ainda no diretório root, execute `cd .\server\` para acessar o diretório do servidor PHP, e rode o comando `php -S localhost:8080` para iniciar o servidor PHP.
+## Funcionamento da Comunicação
+
+O front-end realiza requisições ao servidor PHP a cada 1 segundo para atualizar as informações. Cada requisição aciona:
+- A consulta ao banco de dados.
+- Um cálculo para determinar a **média de registros inseridos no banco de dados em 1 segundo.** *(Este cálculo pode ser atualizado conforme necessário.)*
+
+## Estrutura do Projeto
+
+- **/ (root)**: Projeto Next.js com o front-end.
+- **/server/**: Código PHP responsável pela comunicação com o banco de dados.
+
+
+## Configuração e Inicialização
+
+1. Certifique-se de instalar as dependências:
+     - Front-end: Execute `npm install` na raiz do projeto.
+     - Back-end: Configure as informações de conexão ao banco no arquivo `./server/index.php` (ver linha 21).
+
+2. Para iniciar os servidores:
+     - Front-end: Execute `npm run dev` na raiz do projeto.
+     - Back-end: No diretório `/server/`, rode `php -S localhost:8080`.
+
+3. Configure a base de dados:
+     - Verifique a consistência das tabelas e colunas com o arquivo `.sql` fornecido para facilitar a instalação.
+
+## Possíveis Melhorias e Extensões
+
+- **Documentação da API:** Incluir endpoints, parâmetros e exemplos de respostas.
+- **Testes e Debug:** Adicionar testes unitários e logs para monitoramento.
+- **Variáveis de Ambiente:** Utilizar um arquivo `.env` para gerenciar informações sensíveis como usuário e senha do banco de dados.
+- **Contribuição:** Se o projeto for open source, criar um guia de contribuição (README CONTRIBUTING ou similar).
+- **Licença:** Incluir informações sobre a licença para o uso e distribuição do projeto.
+
+*Adicionei detalhes sobre a arquitetura, configurações e futuras extensões que podem ajudar tanto na execução quanto na manutenção e expansão do projeto.*
