@@ -10,7 +10,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-
 import { Database } from "lucide-react"
 import { Label, Pie, PieChart, Sector } from "recharts"
 import {
@@ -27,7 +26,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-
 import {
   Table,
   TableBody,
@@ -40,19 +38,25 @@ import {
 
 export default function Page() {
   
-  const contacts = useRef([]);
+  const pecas = useRef([]);
   const [averageNew, setAverageNew] = useState(0);
   const taxa = useRef(0);
+  const indexPecaMax = useRef(0);
+
+  // Usando refs para manter os valores atualizados
+  const prevCountRef = useRef(0);
+  const cumulativeNewRef = useRef(0);
+  const callsCountRef = useRef(0);
 
   const [chartData, setChartData] = useState([
-    { browser: "Azul", visitors: 275, fill: "#344BFD" },
-    { browser: "Verde", visitors: 200, fill: "#2BC84D" },
-    { browser: "Vermelho", visitors: 187, fill: "#B10300" },
-    { browser: "Amarelo", visitors: 173, fill: "#FFCC00" },
+    { color: "Azul", quantidade: 0, fill: "#344BFD" },
+    { color: "Verde", quantidade: 0, fill: "#2BC84D" },
+    { color: "Vermelho", quantidade: 0, fill: "#B10300" },
+    { color: "Amarelo", quantidade: 0, fill: "#FFCC00" },
   ]);
   const [chartConfig, setChartConfig] = useState({
-    visitors: {
-      label: "Visitors",
+    quantidade: {
+      label: "Quantidade",
     },
     Azul: {
       label: "Azul",
@@ -71,56 +75,6 @@ export default function Page() {
       color: "hsl(var(--chart-4))",
     },
   });
-
-    useEffect(() => {
-      taxa.current = 1;
-    }, []);
-
-  // Usando refs para manter os valores atualizados
-  const prevCountRef = useRef(0);
-  const cumulativeNewRef = useRef(0);
-  const callsCountRef = useRef(0);
-
-  // Função para adicionar um contato (dados de exemplo)
-  const addContact = async () => {
-    try {
-      const newContact = {
-        id_Cor: Math.floor(Math.random() * 4) + 1,
-        id_Tamanho: Math.floor(Math.random() * 3) + 1,
-        id_Material: Math.floor(Math.random() * 2) + 1,
-        Data_hora: new Date().toISOString().replace('T', ' ').substring(0, 19),
-      };
-      const response = await axios.post("http://localhost:8080?addpeca", newContact, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type"
-        },
-        withCredentials: false
-      });
-      console.log(response.data)
-    } catch (error) {
-      console.error("Erro ao adicionar contato:", error);
-    }
-  };
-
-  // Função para calcular estatísticas de novos registros e média utilizando refs
-  const calculateStatistics = (currentCount) => {
-      // Calcula quantos registros foram adicionados nesta chamada
-      const newRecords = currentCount - prevCountRef.current > 0 ? currentCount - prevCountRef.current : 0;
-      
-      // Atualiza os valores usando refs
-      callsCountRef.current += taxa.current;
-      cumulativeNewRef.current += newRecords;
-      const newAverage = cumulativeNewRef.current / callsCountRef.current;
-
-      // console.log("Registros adicionados nesta chamada:", newRecords);
-      // console.log("Média de registros por segundo:", newAverage);
-
-      setAverageNew(newAverage);
-      prevCountRef.current = currentCount;
-  };
 
   // Refs para estatísticas por cor
   const prevCountColorRef = useRef({
@@ -148,13 +102,108 @@ export default function Page() {
     Amarelo: 0,
   });
 
+  useEffect(() => {
+    taxa.current = 1;
+  }, []);
+
+  // Função para adicionar um contato (dados de exemplo)
+  const addPeca = async () => {
+    try {
+      const newContact = {
+        id_Cor: Math.floor(Math.random() * 4) + 1,
+        id_Tamanho: Math.floor(Math.random() * 3) + 1,
+        id_Material: Math.floor(Math.random() * 2) + 1,
+        Data_hora: new Date().toISOString().replace('T', ' ').substring(0, 19),
+      };
+      
+      const response = await axios.post("http://localhost:8080?addpeca", newContact, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type"
+        },
+        withCredentials: false
+      });
+
+    } catch (error) {
+      console.error("Erro ao adicionar contato:", error);
+    }
+  };
+
+  // Função para buscar os contatos
+  const getPecas = async () => {
+      try {
+        const response = await fetch("http://localhost:8080?getpecas", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar contatos");
+        }
+
+        const data = await response.json();
+        pecas.current = data;
+        
+        // Chama a função de cálculo das estatísticas passando o total atual de registros
+        calculateStatistics(data.length);
+        calculateStatisticsByColor(data);
+      } catch (error) {
+        console.error("Erro ao buscar contatos:", error);
+      }
+  };
+
+  const firstGetPecas = async () => {
+    try {
+      const response = await fetch("http://localhost:8080?getpecas", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar contatos");
+      }
+
+      const data = await response.json();
+
+      prevCountRef.current = data.length;
+      prevCountColorRef.current = {
+        Azul: data.filter(c => c.Cor === "Azul").length,
+        Verde: data.filter(c => c.Cor === "Verde").length,
+        Vermelho: data.filter(c => c.Cor === "Vermelho").length,
+        Amarelo: data.filter(c => c.Cor === "Amarelo").length,
+      };
+    } catch (error) {
+      console.error("Erro ao buscar contatos:", error);
+    }
+  };
+
+  // Função para calcular estatísticas de novos registros e média utilizando refs
+  const calculateStatistics = (currentCount) => {
+      // Calcula quantos registros foram adicionados nesta chamada
+      const newRecords = currentCount - prevCountRef.current > 0 ? currentCount - prevCountRef.current : 0;
+      
+      // Atualiza os valores usando refs
+      callsCountRef.current += taxa.current;
+      cumulativeNewRef.current += newRecords;
+      const newAverage = cumulativeNewRef.current / callsCountRef.current;
+
+      setAverageNew(newAverage);
+      prevCountRef.current = currentCount;
+  };
+
   // Função para calcular estatísticas por cor
-  const calculateStatisticsByColor = (contactsList) => {
+  const calculateStatisticsByColor = (pecasList) => {
     const colors = ["Azul", "Verde", "Vermelho", "Amarelo"];
     const newAverages = {};
 
     colors.forEach((cor) => {
-      const currentCount = contactsList.filter(c => c.Cor === cor).length;
+      const currentCount = pecasList.filter(c => c.Cor === cor).length;
       const prevCount = prevCountColorRef.current[cor];
       const newRecords = currentCount - prevCount > 0 ? currentCount - prevCount : 0;
 
@@ -168,74 +217,47 @@ export default function Page() {
     setAverageNewColor(newAverages);
   };
 
-  // Função para buscar os contatos
-  const fetchContacts = async () => {
-      try {
-        const response = await fetch("http://localhost:8080?getpecas", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Erro ao buscar contatos");
-        }
-        const data = await response.json();
-        // console.log(data);
-        contacts.current = data;
-        // Chama a função de cálculo das estatísticas passando o total atual de registros
-        calculateStatistics(data.length);
-        calculateStatisticsByColor(data); // <-- aqui
-      } catch (error) {
-        console.error("Erro ao buscar contatos:", error);
+  const getMaxQtdPecas = () => {
+    const colors = ["Azul", "Verde", "Vermelho", "Amarelo"];
+    let maxColor = null;
+    let maxCount = -1;
+    let maxIndex = -1;
+
+    colors.forEach((color, idx) => {
+      const count = pecas.current.filter(contact => contact.Cor === color).length;
+      if (count > maxCount) {
+        maxCount = count;
+        maxColor = color;
+        maxIndex = idx;
       }
-  };
+    });
+
+    indexPecaMax.current = maxIndex;
+  }
 
   const updateChartData = () => {
     setChartData([
-      { browser: "Azul", visitors: contacts.current.filter(contact => contact.Cor === "Azul").length, fill: "#344BFD" },
-      { browser: "Verde", visitors: contacts.current.filter(contact => contact.Cor === "Verde").length, fill: "#2BC84D" },
-      { browser: "Vermelho", visitors: contacts.current.filter(contact => contact.Cor === "Vermelho").length, fill: "#B10300" },
-      { browser: "Amarelo", visitors: contacts.current.filter(contact => contact.Cor === "Amarelo").length, fill: "#FFCC00" },
+      { color: "Azul", quantidade: pecas.current.filter(contact => contact.Cor === "Azul").length, fill: "#344BFD" },
+      { color: "Verde", quantidade: pecas.current.filter(contact => contact.Cor === "Verde").length, fill: "#2BC84D" },
+      { color: "Vermelho", quantidade: pecas.current.filter(contact => contact.Cor === "Vermelho").length, fill: "#B10300" },
+      { color: "Amarelo", quantidade: pecas.current.filter(contact => contact.Cor === "Amarelo").length, fill: "#FFCC00" },
     ]);
   };
 
   // Intervalo para adicionar um contato a cada 0.5 segundos
   useEffect(() => {
-    teste();
-    fetchContacts();
+    firstGetPecas();
+    getPecas();
+    
     const addInterval = setInterval(() => {
-      fetchContacts();  
-      addContact();
+      getMaxQtdPecas()
+      getPecas();  
+      addPeca();
       updateChartData();
     }, `${taxa.current * 1000}`);
+
     return () => clearInterval(addInterval);
   }, []);
-
-  const teste = async () => {
-    try {
-      const response = await fetch("http://localhost:8080?getpecas", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Erro ao buscar contatos");
-      }
-      const data = await response.json();
-      // console.log(data);
-      prevCountRef.current = data.length;
-      prevCountColorRef.current = {
-        Azul: data.filter(c => c.Cor === "Azul").length,
-        Verde: data.filter(c => c.Cor === "Verde").length,
-        Vermelho: data.filter(c => c.Cor === "Vermelho").length,
-        Amarelo: data.filter(c => c.Cor === "Amarelo").length,
-      };
-    } catch (error) {
-      console.error("Erro ao buscar contatos:", error);
-    }
-  };
   
   return (
     <>
@@ -261,7 +283,7 @@ export default function Page() {
                     <div className="absolute flex justify-left w-full">
                       <Database color="#FFFFFF" size={40} className="w-max" />
                     </div>
-                    <span className="w-full">{contacts.current.length}</span>
+                    <span className="w-full">{pecas.current.length}</span>
                   </CardContent>
                   <CardFooter className="grid grid-cols-2 grid-rows-2 gap-2 text-sm">
                   </CardFooter>
@@ -287,11 +309,11 @@ export default function Page() {
                         />
                         <Pie
                           data={chartData}
-                          dataKey="visitors"
-                          nameKey="browser"
+                          dataKey="quantidade"
+                          nameKey="color"
                           innerRadius={50}
                           strokeWidth={5}
-                          activeIndex={0}
+                          activeIndex={indexPecaMax.current}
                           activeShape={({
                             outerRadius = 0,
                             ...props
@@ -375,7 +397,7 @@ export default function Page() {
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#344BFD" size={40} className="" />
-                      <span className="text-[20px]">{contacts.current.filter(contact => contact.Cor === "Azul").length}</span>
+                      <span className="text-[20px]">{pecas.current.filter(contact => contact.Cor === "Azul").length}</span>
                     </div>
                     <Table>
                       <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -392,11 +414,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "P")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "P")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "P")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "P")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -407,11 +429,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "M")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "M")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "M")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "M")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -422,11 +444,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "G")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "G")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "G")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "G")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -442,7 +464,7 @@ export default function Page() {
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#2BC84D" size={40} className="" />
-                      <span className="text-[20px]">{contacts.current.filter(contact => contact.Cor === "Verde").length}</span>
+                      <span className="text-[20px]">{pecas.current.filter(contact => contact.Cor === "Verde").length}</span>
                     </div>
                     <Table>
                       <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -459,11 +481,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "P")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "P")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "P")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "P")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -474,11 +496,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "M")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "M")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "M")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "M")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -489,11 +511,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "G")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "G")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "G")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "G")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -509,7 +531,7 @@ export default function Page() {
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#B10300" size={40} className="" />
-                      <span className="text-[20px]">{contacts.current.filter(contact => contact.Cor === "Vermelho").length}</span>
+                      <span className="text-[20px]">{pecas.current.filter(contact => contact.Cor === "Vermelho").length}</span>
                     </div>
                     <Table>
                       <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -526,11 +548,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "P")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "P")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "P")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "P")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -541,11 +563,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "M")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "M")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "M")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "M")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -556,11 +578,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "G")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "G")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "G")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "G")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -576,7 +598,7 @@ export default function Page() {
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#FFCC00" size={40} className="" />
-                      <span className="text-[20px]">{contacts.current.filter(contact => contact.Cor === "Amarelo").length}</span>
+                      <span className="text-[20px]">{pecas.current.filter(contact => contact.Cor === "Amarelo").length}</span>
                     </div>
                     <Table>
                       <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -593,11 +615,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "P")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "P")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "P")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "P")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -608,11 +630,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "M")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "M")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "M")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "M")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
@@ -623,11 +645,11 @@ export default function Page() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="font-medium">Aço</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "G")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "G")).length}</TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="font-medium">Plástico</TableCell>
-                                <TableCell className="font-medium">{contacts.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "G")).length}</TableCell>
+                                <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "G")).length}</TableCell>
                               </TableRow>
                             </TableBody>
                           </Table>
