@@ -90,12 +90,16 @@ export default function Page() {
         id_Material: Math.floor(Math.random() * 2) + 1,
         Data_hora: new Date().toISOString().replace('T', ' ').substring(0, 19),
       };
-      const response = await axios.post("http://localhost:8080/addpeca", newContact, {
+      const response = await axios.post("http://localhost:8080?addpeca", newContact, {
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type"
         },
+        withCredentials: false
       });
-      // console.log(response.data)
+      console.log(response.data)
     } catch (error) {
       console.error("Erro ao adicionar contato:", error);
     }
@@ -167,7 +171,7 @@ export default function Page() {
   // Função para buscar os contatos
   const fetchContacts = async () => {
       try {
-        const response = await fetch("http://localhost:8080/getpecas", {
+        const response = await fetch("http://localhost:8080?getpecas", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -210,7 +214,7 @@ export default function Page() {
 
   const teste = async () => {
     try {
-      const response = await fetch("http://localhost:8080/getpecas", {
+      const response = await fetch("http://localhost:8080?getpecas", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -371,7 +375,7 @@ export default function Page() {
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#344BFD" size={40} className="" />
-                      <span className="text-[20px]">15</span>
+                      <span className="text-[20px]">{contacts.current.filter(contact => contact.Cor === "Azul").length}</span>
                     </div>
                     <Table>
                       <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -438,7 +442,7 @@ export default function Page() {
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#2BC84D" size={40} className="" />
-                      <span className="text-[20px]">15</span>
+                      <span className="text-[20px]">{contacts.current.filter(contact => contact.Cor === "Verde").length}</span>
                     </div>
                     <Table>
                       <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -505,7 +509,7 @@ export default function Page() {
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#B10300" size={40} className="" />
-                      <span className="text-[20px]">15</span>
+                      <span className="text-[20px]">{contacts.current.filter(contact => contact.Cor === "Vermelho").length}</span>
                     </div>
                     <Table>
                       <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -572,7 +576,7 @@ export default function Page() {
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#FFCC00" size={40} className="" />
-                      <span className="text-[20px]">15</span>
+                      <span className="text-[20px]">{contacts.current.filter(contact => contact.Cor === "Amarelo").length}</span>
                     </div>
                     <Table>
                       <TableCaption>Tamanho, quantidade total e por material</TableCaption>

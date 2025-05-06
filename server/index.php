@@ -4,6 +4,10 @@ header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 header("Content-Type: application/json");
 // echo json_encode(["message" => "Hello, World!"]);
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 class Api {
     private static $pdo;
@@ -18,7 +22,7 @@ class Api {
 
         self::$start_time = time();
         try {
-            self::$pdo = new PDO("mysql:host=localhost;dbname=db_integrador", "root", "mysqls3rv3r");
+            self::$pdo = new PDO("mysql:host=localhost;dbname=db_integrador", "appuser", "appus3rMysql");
             self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo json_encode(["error" => "Database connection failed: " . $e->getMessage()]);
@@ -28,13 +32,13 @@ class Api {
 
     public static function handleRequest() {
         $url = $_SERVER["REQUEST_URI"];
-        $uri = explode("?", $url)[0];
+        $uri = explode("?", $url)[1];
 
         switch ($uri) {
-            case "/addpeca":
+            case "addpeca":
                 self::addpeca();
                 break;
-            case "/getpecas":
+            case "getpecas":
                 self::getpecas();
                 break;
             default:
@@ -46,13 +50,13 @@ class Api {
     private static function addpeca() {
         $data = json_decode(file_get_contents("php://input"), true);
 
-        $id_cor = $data["id_Cor"] ?? null;
-        $id_tamanho = $data["id_Tamanho"] ?? null;
-        $id_material = $data["id_Material"] ?? null;
+        $id_cor = intval($data["id_Cor"] ?? null);
+        $id_tamanho = intval($data["id_Tamanho"] ?? null);
+        $id_material = intval($data["id_Material"] ?? null);
         $data_hora = $data["Data_hora"] ?? null;
 
-        try {
-            $stmt = self::$pdo->prepare("INSERT INTO tb_Pecas (id_Cor, id_Tamanho, id_Material, Data_hora) VALUES (:id_cor, :id_tamanho, :id_material, :data_hora)");
+        // try {
+            $stmt = self::$pdo->prepare("INSERT INTO tb_pecas (id_cor, id_tamanho, id_material, data_hora) VALUES (:id_cor, :id_tamanho, :id_material, :data_hora)");
             $stmt->bindParam(':id_cor', $id_cor);
             $stmt->bindParam(':id_tamanho', $id_tamanho);
             $stmt->bindParam(':id_material', $id_material);
@@ -64,9 +68,9 @@ class Api {
             } else {
                 echo json_encode(["message" => "Failed to insert record"]);
             }
-        } catch (PDOException $e) {
-            echo json_encode(["error" => $e->getMessage()]);
-        }
+        // } catch (PDOException $e) {
+        //     echo json_encode(["error" => $e->getMessage()]);
+        // }
     }
 
     private static function getpecas() {
