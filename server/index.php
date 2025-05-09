@@ -75,7 +75,7 @@ class Api {
 
     private static function getpecas() {
         try {
-            $stmt = self::$pdo->prepare("SELECT tb_pecas.id_peca, tb_cor.Cor, tb_tamanho.Tamanho, tb_material.Material FROM tb_pecas INNER JOIN tb_cor ON tb_pecas.id_Cor = tb_cor.id_Cor INNER JOIN tb_tamanho ON tb_pecas.id_Tamanho = tb_tamanho.id_Tamanho INNER JOIN tb_material ON tb_pecas.id_Material = tb_material.id_Material");
+            $stmt = self::$pdo->prepare("SELECT tb_pecas.id_peca, tb_cor.Cor, tb_tamanho.Tamanho, tb_material.Material, data_hora FROM tb_pecas INNER JOIN tb_cor ON tb_pecas.id_Cor = tb_cor.id_Cor INNER JOIN tb_tamanho ON tb_pecas.id_Tamanho = tb_tamanho.id_Tamanho INNER JOIN tb_material ON tb_pecas.id_Material = tb_material.id_Material");
             $stmt->execute();
             $pecas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
