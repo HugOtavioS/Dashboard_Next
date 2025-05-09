@@ -70,7 +70,7 @@ export default function SobrePage() {
         {/* Team Members Section - Reduced height with parallax */}
         <ParallaxSection speed={0.08} offset={40} minOpacity={0.8}>
           <div className="container mx-auto px-4">
-            <Card className="overflow-hidden border-gray-200 bg-white backdrop-blur-sm shadow-lg">
+            <Card className="rounded-lg border border-border bg-card text-card-foreground shadow-sm overflow-hidden border-gray-200 bg-white backdrop-blur-sm shadow-lg">
               <CardHeader className="pt-8">
                 <CardTitle className="text-center text-3xl text-gray-800">Nossa Equipe</CardTitle>
                 <CardDescription className="text-center text-lg text-gray-600">
@@ -78,20 +78,42 @@ export default function SobrePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pb-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mt-6">
-                  {[1, 2, 3, 4, 5].map((member) => (
-                    <div key={member} className="flex flex-col items-center transform transition-all duration-300 hover:scale-105">
+                <div className="flex justify-center gap-12 mt-6">
+                    <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-105">
                       <div className="w-36 h-36 rounded-full bg-blue-100 mb-4 flex items-center justify-center shadow-md">
                         <span className="text-5xl text-blue-600">
-                          {member}
+                          
                         </span>
                       </div>
-                      <h3 className="text-xl font-medium text-blue-600">Membro {member}</h3>
+                      <h3 className="text-xl font-medium text-blue-600">Hugo Otávio</h3>
                       <p className="text-base text-gray-700 text-center mt-2">
                         Desenvolvedor
                       </p>
                     </div>
-                  ))}
+
+                    <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-105">
+                      <div className="w-36 h-36 rounded-full bg-blue-100 mb-4 flex items-center justify-center shadow-md">
+                        <span className="text-5xl text-blue-600">
+                          
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-medium text-blue-600">Misael Morgado</h3>
+                      <p className="text-base text-gray-700 text-center mt-2">
+                        Desenvolvedor
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-105">
+                      <div className="w-36 h-36 rounded-full bg-blue-100 mb-4 flex items-center justify-center shadow-md">
+                        <span className="text-5xl text-blue-600">
+                          
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-medium text-blue-600">Júlio César</h3>
+                      <p className="text-base text-gray-700 text-center mt-2">
+                        Desenvolvedor
+                      </p>
+                    </div>
                 </div>
               </CardContent>
             </Card>
@@ -103,7 +125,7 @@ export default function SobrePage() {
         {/* Project Description Section - Reduced height with parallax */}
         <ParallaxSection speed={0.06} offset={50} minOpacity={0.8}>
           <div className="container mx-auto px-4">
-            <Card className="border-gray-200 bg-white backdrop-blur-sm shadow-lg">
+            <Card className="rounded-lg border border-border bg-card text-card-foreground shadow-sm border-gray-200 bg-white backdrop-blur-sm shadow-lg">
               <CardHeader className="pt-8">
                 <CardTitle className="text-center text-3xl text-gray-800">Sobre o Projeto</CardTitle>
               </CardHeader>
@@ -136,7 +158,7 @@ export default function SobrePage() {
         {/* Technologies Section - Reduced height with parallax */}
         <ParallaxSection speed={0.09} offset={60} minOpacity={0.8}>
           <div className="container mx-auto px-4">
-            <Card className="border-gray-200 bg-white backdrop-blur-sm shadow-lg">
+            <Card className="rounded-lg border border-border bg-card text-card-foreground shadow-sm border-gray-200 bg-white backdrop-blur-sm shadow-lg">
               <CardHeader className="pt-8">
                 <CardTitle className="text-center text-3xl text-gray-800">Tecnologias Utilizadas</CardTitle>
               </CardHeader>

@@ -59,7 +59,7 @@ export default function Home() {
                   Dashboard de Produção
                 </h1>
                 <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
-                  Projeto integrador desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sistemas do SENAI
+                  Projeto integrador desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sistemas do SENAI Taubaté
                 </p>
                 <div className="flex flex-wrap gap-4 justify-center">
                   <Link 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef, use } from "react"
+import { useEffect, useState, useRef } from "react"
 import axios from "axios";
 
 import { AppSidebar } from "@/components/app-sidebar"
@@ -36,7 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-export default function Page() {
+export default function Dashboard() {
   
   const pecas = useRef([]);
   const [averageNew, setAverageNew] = useState(0);
@@ -276,13 +276,13 @@ export default function Page() {
           <main className="w-full h-full py-12 px-12">
             <div className="chart-1 flex flex-col gap-16 justify-center w-full h-max">
 
-              <div className="flex justify-center gap-8 w-full">
-                <Card className="flex flex-col gap-4 w-full max-w-[350px] bg-white border-gray-200 shadow-sm">
+              <div className="flex gap-12 justify-center w-full mx-auto">
+                <Card className="rounded-lg border border-border text-card-foreground shadow-sm flex flex-col gap-4 w-full max-w-[350px] border-gray-200 shadow-sm">
                   <CardHeader className="items-center pb-0">
-                    <CardTitle className="text-center text-[20px] text-blue-600">Quantidade Total de Peças</CardTitle>
+                    <CardTitle className="text-center text-[24px] text-blue-600">Quantidade Total de Peças</CardTitle>
                     <CardDescription className="text-center text-gray-600"></CardDescription>
                   </CardHeader>
-                  <CardContent className="relative flex items-center text-[32px] font-semibold text-center px-6 rounded-lg text-gray-800">
+                  <CardContent className="relative flex items-center bg-[#4D648D] text-white p-6 text-[32px] font-semibold text-center rounded-lg text-gray-800">
                     <div className="absolute flex justify-left w-full">
                       <Database color="#3b82f6" size={40} className="w-max" />
                     </div>
@@ -292,9 +292,9 @@ export default function Page() {
                   </CardFooter>
                 </Card>
 
-                <Card className="flex flex-col gap-4 w-full max-w-[350px] bg-white border-gray-200 shadow-sm">
+                <Card className="rounded-lg border border-border bg-card text-card-foreground shadow-sm flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200 shadow-sm">
                   <CardHeader className="items-center pb-0">
-                    <CardTitle className="text-center text-[20px] text-blue-600">Taxa Média</CardTitle>
+                    <CardTitle className="te4text-blue-600">Taxa Média</CardTitle>
                     <CardDescription className="text-center text-gray-600">Peças por segundo</CardDescription>
                   </CardHeader>
                   <CardContent className="relative flex items-center text-[32px] font-semibold text-center px-6 rounded-lg text-gray-800">
@@ -302,9 +302,9 @@ export default function Page() {
                   </CardContent>
                 </Card>
 
-                <Card className="flex flex-col gap-4 w-full max-w-[350px] bg-white border-gray-200 shadow-sm">
+                <Card className="rounded-lg border border-border bg-card text-card-foreground shadow-sm flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200 shadow-sm">
                   <CardHeader className="items-center pb-0">
-                    <CardTitle className="text-center text-[20px] text-blue-600">Cor Predominante</CardTitle>
+                    <CardTitle className="te4text-blue-600">Cor Predominante</CardTitle>
                     <CardDescription className="text-center text-gray-600">{getMaxQtdPecas()}</CardDescription>
                   </CardHeader>
                   <CardContent className="relative flex items-center text-[32px] font-semibold text-center px-6 rounded-lg text-gray-800">
@@ -313,359 +313,399 @@ export default function Page() {
                 </Card>
               </div>
 
-              <div className="line-1 flex justify-center gap-8 w-full">
-                <Card className="flex flex-col w-full max-w-[350px] bg-white border-gray-200 shadow-sm">
-                  <CardHeader className="items-center pb-0">
-                    <CardTitle className="text-center text-blue-600">Quantidade de Peças por cor</CardTitle>
-                    <CardDescription className="text-center text-gray-500">January - June 2024</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex-1 pb-0">
-                    <ChartContainer
-                      config={chartConfig}
-                      className="mx-auto aspect-square max-h-[250px]"
-                    >
-                      <PieChart>
-                        <ChartTooltip
-                          cursor={false}
-                          content={<ChartTooltipContent hideLabel />}
-                        />
-                        <Pie
-                          data={chartData}
-                          dataKey="quantidade"
-                          nameKey="color"
-                          innerRadius={50}
-                          strokeWidth={5}
-                          activeIndex={indexPecaMax.current}
-                          activeShape={({
-                            outerRadius = 0,
-                            ...props
-                          }) => (
-                            <Sector {...props} outerRadius={outerRadius + 10} />
-                          )}
-                        />
-                      </PieChart>
-                    </ChartContainer>
-                  </CardContent>
-                  <CardFooter className="grid grid-cols-2 grid-rows-2 gap-2 text-sm text-gray-700">
-                    <div className="flex items-center gap-2 font-medium leading-none">
-                      <div className="h-4 w-4 bg-red-600 rounded-full"></div> Vermelho
+
+              <div className="line-1 flex flex-col justify-center gap-8 w-full">
+                <div className="flex justify-between gap-6">
+                  <Card className="rounded-lg border border-border  text-card-foreground shadow-sm flex flex-col w-full max-w-[350px] bg-[#B6CCD8] p-4 border-gray-200 shadow-sm">
+                    <CardHeader className="items-center pb-0">
+                      <CardTitle className="text-center text-blue-600">Quantidade de Peças por cor</CardTitle>
+                      <CardDescription className="text-center text-gray-500">January - June 2024</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1 pb-0">
+                      <ChartContainer
+                        config={chartConfig}
+                        className="mx-auto aspect-square max-h-[250px]"
+                      >
+                        <PieChart>
+                          <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideLabel />}
+                          />
+                          <Pie
+                            data={chartData}
+                            dataKey="quantidade"
+                            nameKey="color"
+                            innerRadius={50}
+                            strokeWidth={5}
+                            activeIndex={indexPecaMax.current}
+                            activeShape={({
+                              outerRadius = 0,
+                              ...props
+                            }) => (
+                              <Sector {...props} outerRadius={outerRadius + 10} />
+                            )}
+                          />
+                        </PieChart>
+                      </ChartContainer>
+                    </CardContent>
+                    <CardFooter className="grid grid-cols-2 grid-rows-2 gap-2 text-sm text-gray-700">
+                      <div className="flex items-center gap-2 font-medium leading-none">
+                        <div className="h-4 w-4 bg-red-600 rounded-full"></div> Vermelho
+                      </div>
+                      <div className="flex items-center gap-2 font-medium leading-none">
+                        <div className="h-4 w-4 bg-green-500 rounded-full"></div> Verde
+                      </div>
+                      <div className="flex items-center gap-2 font-medium leading-none">
+                        <div className="h-4 w-4 bg-blue-600 rounded-full"></div> Azul
+                      </div>
+                      <div className="flex items-center gap-2 font-medium leading-none">
+                        <div className="h-4 w-4 bg-yellow-400 rounded-full"></div> Amarelo
+                      </div>
+                    </CardFooter>
+                  </Card>
+                  <div className="flex justify-center max-w-[732px] min-w-[732px]">
+                    <div className="flex flex-wrap justify-center gap-6 w-full">
+                      <Card className="rounded-lg border border-border text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#B6CCD8] border-gray-200 shadow-sm">
+                        <div className="absolute top-0 left-0 w-1/8 h-full bg-[#344BFD] rounded-s-lg"></div>
+                        <CardHeader className="items-center w-3/5">
+                          <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Azul</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex w-full h-full pb-0 p-0">
+                          <span className="m-auto text-[36px] text-gray-800">{averageNewColor.Azul.toFixed(2)}</span>
+                        </CardContent>
+                      </Card>
+                  
+                      <Card className="rounded-lg border border-border text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#B6CCD8] border-gray-200 shadow-sm">
+                        <div className="absolute top-0 left-0 w-1/8 h-full bg-[#2BC84D] rounded-s-lg"></div>
+                        <CardHeader className="items-center w-3/5">
+                          <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Verde</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex w-full h-full pb-0 p-0">
+                          <span className="m-auto text-[36px] text-gray-800">{averageNewColor.Verde.toFixed(2)}</span>
+                        </CardContent>
+                      </Card>
+                  
+                      <Card className="rounded-lg border border-border text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#B6CCD8] border-gray-200 shadow-sm">
+                        <div className="absolute top-0 left-0 w-1/8 h-full bg-[#B10300] rounded-s-lg"></div>
+                        <CardHeader className="items-center w-3/5">
+                          <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Vermelho</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex w-full h-full pb-0 p-0">
+                          <span className="m-auto text-[36px] text-gray-800">{averageNewColor.Vermelho.toFixed(2)}</span>
+                        </CardContent>
+                      </Card>
+                  
+                      <Card className="rounded-lg border border-border text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#B6CCD8] border-gray-200 shadow-sm">
+                        <div className="absolute top-0 left-0 w-1/8 h-full bg-[#FFCC00] rounded-s-lg"></div>
+                        <CardHeader className="items-center w-3/5">
+                          <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Amarelo</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex w-full h-full pb-0 p-0">
+                          <span className="m-auto text-[36px] text-gray-800">{averageNewColor.Amarelo.toFixed(2)}</span>
+                        </CardContent>
+                      </Card>
                     </div>
-                    <div className="flex items-center gap-2 font-medium leading-none">
-                      <div className="h-4 w-4 bg-green-500 rounded-full"></div> Verde
-                    </div>
-                    <div className="flex items-center gap-2 font-medium leading-none">
-                      <div className="h-4 w-4 bg-blue-600 rounded-full"></div> Azul
-                    </div>
-                    <div className="flex items-center gap-2 font-medium leading-none">
-                      <div className="h-4 w-4 bg-yellow-400 rounded-full"></div> Amarelo
-                    </div>
-                  </CardFooter>
-                </Card>
-
-                <div className="flex justify-center max-w-[732px] min-w-[732px]">
-                  <div className="flex flex-wrap justify-center gap-8 w-full">
-                    <Card className="relative flex flex-col items-center w-[350px] h-[200px] bg-white border-gray-200 shadow-sm">
-                      <div className="absolute top-0 left-0 w-1/8 h-full bg-[#344BFD] rounded-s-lg"></div>
-                      <CardHeader className="items-center w-3/5">
-                        <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Azul</CardTitle>
-                      </CardHeader>
-
-                      <CardContent className="flex w-full h-full pb-0 p-0">
-                        <span className="m-auto text-[36px] text-gray-800">{averageNewColor.Azul.toFixed(2)}</span>
-                      </CardContent>
-                    </Card>
-                    
-                    <Card className="relative flex flex-col items-center w-[350px] h-[200px] bg-white border-gray-200 shadow-sm">
-                      <div className="absolute top-0 left-0 w-1/8 h-full bg-[#2BC84D] rounded-s-lg"></div>
-                      <CardHeader className="items-center w-3/5">
-                        <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Verde</CardTitle>
-                      </CardHeader>
-
-                      <CardContent className="flex w-full h-full pb-0 p-0">
-                        <span className="m-auto text-[36px] text-gray-800">{averageNewColor.Verde.toFixed(2)}</span>
-                      </CardContent>
-                    </Card>
-                    
-                    <Card className="relative flex flex-col items-center w-[350px] h-[200px] bg-white border-gray-200 shadow-sm">
-                      <div className="absolute top-0 left-0 w-1/8 h-full bg-[#B10300] rounded-s-lg"></div>
-                      <CardHeader className="items-center w-3/5">
-                        <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Vermelho</CardTitle>
-                      </CardHeader>
-
-                      <CardContent className="flex w-full h-full pb-0 p-0">
-                        <span className="m-auto text-[36px] text-gray-800">{averageNewColor.Vermelho.toFixed(2)}</span>
-                      </CardContent>
-                    </Card>
-                    
-                    <Card className="relative flex flex-col items-center w-[350px] h-[200px] bg-white border-gray-200 shadow-sm">
-                      <div className="absolute top-0 left-0 w-1/8 h-full bg-[#FFCC00] rounded-s-lg"></div>
-                      <CardHeader className="items-center w-3/5">
-                        <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Amarelo</CardTitle>
-                      </CardHeader>
-
-                      <CardContent className="flex w-full h-full pb-0 p-0">
-                        <span className="m-auto text-[36px] text-gray-800">{averageNewColor.Amarelo.toFixed(2)}</span>
-                      </CardContent>
-                    </Card>
                   </div>
                 </div>
 
-                <Card className="shadow-sm bg-white border-gray-200">
-                  <CardHeader>
-                    <CardTitle className="text-blue-600">Estatísticas por Cor</CardTitle>
-                    <CardDescription className="text-gray-600">
-                      Detalhamento da taxa de produção por cor
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableHead className="w-[100px]">Cor</TableHead>
-                          <TableHead>Quantidade</TableHead>
-                          <TableHead>Taxa (peça/s)</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {Object.keys(averageNewColor).map((color) => (
-                          <TableRow key={color} className="hover:bg-gray-100">
-                            <TableCell className="font-medium">{color}</TableCell>
-                            <TableCell>
-                              {pecas.current.filter(c => c.Cor === color).length}
-                            </TableCell>
-                            <TableCell>{averageNewColor[color].toFixed(2)}</TableCell>
+                <div className="flex flex-col gap-4">
+                  <Card className="rounded-lg border border-border bg-[#B6CCD8] text-card-foreground shadow-sm shadow-sm p-4 border-gray-200">
+                    <CardHeader>
+                      <CardTitle className="text-blue-600">Últimas Peças</CardTitle>
+                      <CardDescription className="text-gray-600">
+                        Registro das peças mais recentes
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="hover:bg-gray-100">
+                            <TableHead className="w-[100px]">ID</TableHead>
+                            <TableHead>Cor</TableHead>
+                            <TableHead>Tamanho</TableHead>
+                            <TableHead>Material</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-
-                <Card className="shadow-sm bg-white border-gray-200">
-                  <CardHeader>
-                    <CardTitle className="text-blue-600">Últimas Peças</CardTitle>
-                    <CardDescription className="text-gray-600">
-                      Registro das peças mais recentes
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableHead className="w-[100px]">ID</TableHead>
-                          <TableHead>Cor</TableHead>
-                          <TableHead>Tamanho</TableHead>
-                          <TableHead>Material</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {pecas.current.slice(-5).reverse().map((peca) => (
-                          <TableRow key={peca.id} className="hover:bg-gray-100">
-                            <TableCell className="font-medium">#{peca.id}</TableCell>
-                            <TableCell>{peca.Cor}</TableCell>
-                            <TableCell>{peca.Tamanho}</TableCell>
-                            <TableCell>{peca.Material}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
+                        </TableHeader>
+                        <TableBody>
+                          {pecas.current.slice(-5).reverse().map((peca) => (
+                            <TableRow key={peca.id} className="hover:bg-gray-100">
+                              <TableCell className="font-medium">#{peca.id}</TableCell>
+                              <TableCell>{peca.Cor}</TableCell>
+                              <TableCell>{peca.Tamanho}</TableCell>
+                              <TableCell>{peca.Material}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
 
               <div className="grid grid-cols-3 gap-8 w-full">
                 <div className="w-full bg-white border-gray-200 rounded-lg shadow-sm">
-                  <div className="border border-gray-200 bg-white text-gray-800 shadow-sm w-full p-4 rounded-lg">
+                  <div className="border border-gray-200 bg-[#B6CCD8] text-gray-800 shadow-sm w-full p-4 rounded-lg">
+                    <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
+                      <Database color="#344BFD" size={40} className="" />
+                      <span className="text-[20px]">{pecas.current.filter(contact => contact.Cor === "Azul").length}</span>
+                    </div>
+                      <Table>
+                        <TableCaption>Tamanho, quantidade total e por material</TableCaption>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="">Tamanho</TableHead>
+                            <TableHead className="">Material</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className="font-medium">P</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "P")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "P")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">M</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "M")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "M")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">G</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Azul" && contact.Tamanho === "G")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Azul" && contact.Tamanho === "G")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                  </div>  
+                </div>
+                
+                <div className="w-full bg-[#B6CCD8] rounded-lg">
+                  {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
+                  <div className="w-full p-4 rounded-lg">
+                    {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#2BC84D" size={40} className="" />
                       <span className="text-[20px]">{pecas.current.filter(contact => contact.Cor === "Verde").length}</span>
                     </div>
-                    <Table>
-                      <TableCaption className="text-gray-600">Tamanho, quantidade total e por material</TableCaption>
-                      <TableHeader>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableHead className="text-gray-800">Tamanho</TableHead>
-                          <TableHead className="text-gray-800">Material</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">P</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "P")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "P")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">M</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "M")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "M")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">G</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "G")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "G")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                      <Table>
+                        <TableCaption>Tamanho, quantidade total e por material</TableCaption>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="">Tamanho</TableHead>
+                            <TableHead className="">Material</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className="font-medium">P</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "P")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "P")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">M</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "M")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "M")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">G</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Verde" && contact.Tamanho === "G")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Verde" && contact.Tamanho === "G")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
                   </div>
                 </div>
 
-                <div className="w-full bg-white border-gray-200 rounded-lg shadow-sm">
-                  <div className="border border-gray-200 bg-white text-gray-800 shadow-sm w-full p-4 rounded-lg">
+                <div className="w-full bg-[#B6CCD8] rounded-lg">
+                  {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
+                  <div className="w-full p-4 rounded-lg">
+                    {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#B10300" size={40} className="" />
                       <span className="text-[20px]">{pecas.current.filter(contact => contact.Cor === "Vermelho").length}</span>
                     </div>
-                    <Table>
-                      <TableCaption className="text-gray-600">Tamanho, quantidade total e por material</TableCaption>
-                      <TableHeader>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableHead className="text-gray-800">Tamanho</TableHead>
-                          <TableHead className="text-gray-800">Material</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">P</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "P")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "P")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">M</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "M")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "M")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">G</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "G")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "G")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                      <Table>
+                        <TableCaption>Tamanho, quantidade total e por material</TableCaption>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="">Tamanho</TableHead>
+                            <TableHead className="">Material</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className="font-medium">P</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "P")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "P")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">M</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "M")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "M")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">G</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "G")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Vermelho" && contact.Tamanho === "G")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
                   </div>
                 </div>
 
-                <div className="w-full bg-white border-gray-200 rounded-lg shadow-sm">
-                  <div className="border border-gray-200 bg-white text-gray-800 shadow-sm w-full p-4 rounded-lg">
+                <div className="w-full bg-[#B6CCD8] rounded-lg">
+                  {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
+                  <div className="w-full p-4 rounded-lg">
+                    {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#FFCC00" size={40} className="" />
                       <span className="text-[20px]">{pecas.current.filter(contact => contact.Cor === "Amarelo").length}</span>
                     </div>
-                    <Table>
-                      <TableCaption className="text-gray-600">Tamanho, quantidade total e por material</TableCaption>
-                      <TableHeader>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableHead className="text-gray-800">Tamanho</TableHead>
-                          <TableHead className="text-gray-800">Material</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">P</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "P")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "P")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">M</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "M")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "M")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                        <TableRow className="hover:bg-gray-100">
-                          <TableCell className="font-medium text-gray-800">G</TableCell>
-                          <Table>
-                            <TableBody>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Aço</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "G")).length}</TableCell>
-                              </TableRow>
-                              <TableRow className="hover:bg-gray-100">
-                                <TableCell className="font-medium text-gray-800">Plástico</TableCell>
-                                <TableCell className="font-medium text-gray-800">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "G")).length}</TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                      <Table>
+                        <TableCaption>Tamanho, quantidade total e por material</TableCaption>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="">Tamanho</TableHead>
+                            <TableHead className="">Material</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className="font-medium">P</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "P")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "P")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">M</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "M")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "M")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-medium">G</TableCell>
+                            <Table>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-medium">Aço</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "G")).length}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-medium">Plástico</TableCell>
+                                  <TableCell className="font-medium">{pecas.current.filter(contact => (contact.Material === "Não Metalico" && contact.Cor === "Amarelo" && contact.Tamanho === "G")).length}</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
                   </div>
                 </div>
               </div>
