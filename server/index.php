@@ -22,7 +22,7 @@ class Api {
 
         self::$start_time = time();
         try {
-            self::$pdo = new PDO("mysql:host=localhost;dbname=db_integrador", "appuser", "appus3rMysql");
+            self::$pdo = new PDO("mysql:host=localhost;dbname=db_integrador", "root", "030119983");
             self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo json_encode(["error" => "Database connection failed: " . $e->getMessage()]);
