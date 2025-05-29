@@ -78,7 +78,7 @@ export default function Home() {
               </section>
               
               <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <Card className="bg-white border-gray-200 shadow-lg overflow-hidden">
+                <Card className="bg-gray-50 rounded-lg border-gray-200 shadow-lg p-4 overflow-hidden">
                   <CardHeader>
                     <CardTitle className="text-blue-600">Visualização de Dados</CardTitle>
                     <CardDescription className="text-gray-500">Monitoramento em tempo real</CardDescription>
@@ -90,7 +90,7 @@ export default function Home() {
                   </CardContent>
                 </Card>
                 
-                <Card className="bg-white border-gray-200 shadow-lg overflow-hidden">
+                <Card className="bg-gray-50 rounded-lg border-gray-200 shadow-lg p-4 overflow-hidden">
                   <CardHeader>
                     <CardTitle className="text-blue-600">Análise de Peças</CardTitle>
                     <CardDescription className="text-gray-500">Estatísticas e tendências</CardDescription>
@@ -102,7 +102,7 @@ export default function Home() {
                   </CardContent>
                 </Card>
                 
-                <Card className="bg-white border-gray-200 shadow-lg overflow-hidden">
+                <Card className="bg-gray-50 rounded-lg border-gray-200 shadow-lg p-4 overflow-hidden">
                   <CardHeader>
                     <CardTitle className="text-blue-600">Tecnologias Utilizadas</CardTitle>
                     <CardDescription className="text-gray-500">Stack de desenvolvimento</CardDescription>
