@@ -300,7 +300,7 @@ export default function Dashboard() {
           
           <main className="w-full h-full py-12 px-12">
             <div className="chart-1 flex flex-col gap-16 justify-center w-full h-max">
-            <div className="flex justify-center gap-8 w-fit absolute top-1">
+            <div className="flex justify-center gap-8 w-fit absolute top-4 right-4">
                 <Card className="flex flex-col gap-4 w-full">
                   <CardContent className="relative flex items-center text-[16px] font-semibold text-center bg-[#4D648D] py-8 rounded-lg text-white p-5">
                     <div className="flex justify-center flex-col gap-3 w-full">
@@ -352,23 +352,21 @@ export default function Dashboard() {
                   </CardFooter>
                 </Card>
               </div>
-              <div className="flex gap-12 justify-center items-center w-full mx-auto m-10">
-                <Card className="rounded-lg border border-border text-card-foreground shadow-sm flex flex-col gap-4 w-full max-w-[350px] border-gray-200 shadow-sm">
+              <div className="flex gap-12 justify-center items-end w-full mx-auto m-10">
+                <Card className="rounded-lg text-card-foreground flex flex-col gap-4 w-full max-w-[350px]">
                   <CardHeader className="items-center pb-0">
                     <CardTitle className="text-center text-[24px] text-blue-600">Quantidade Total de Peças</CardTitle>
                     <CardDescription className="text-center text-gray-600"></CardDescription>
                   </CardHeader>
-                  <CardContent className="relative flex items-center bg-[#4D648D] text-white p-6 text-[32px] font-semibold text-center rounded-lg text-gray-800">
+                  <CardContent className="relative flex items-center bg-[#4D648D] min-h-[144px] text-white p-6 text-[32px] font-semibold text-center rounded-lg text-gray-800">
                     <div className="absolute flex justify-left w-full">
                       <Database color="#3b82f6" size={40} className="w-max" />
                     </div>
                     <span className="w-full">{pecas.current.length}</span>
                   </CardContent>
-                  <CardFooter className="grid grid-cols-2 grid-rows-2 gap-2 text-sm">
-                  </CardFooter>
                 </Card>
 
-                <Card className="rounded-lg border border-border bg-card text-card-foreground shadow-sm flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200 shadow-sm">
+                <Card className="rounded-lg border border-border bg-card text-card-foreground flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200">
                   <CardHeader className="items-center pb-0">
                     <CardTitle className="te4text-blue-600">Taxa Média</CardTitle>
                     <CardDescription className="text-center text-gray-600">Peças por segundo</CardDescription>
@@ -378,7 +376,7 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
 
-                {filter === "all" ? (<Card className="rounded-lg border border-border bg-card text-card-foreground shadow-sm flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200 shadow-sm">
+                {filter === "all" ? (<Card className="rounded-lg border border-border bg-card text-card-foreground flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200">
                   <CardHeader className="items-center pb-0">
                     <CardTitle className="te4text-blue-600">Cor Predominante</CardTitle>
                     <CardDescription className="text-center text-gray-600">{getMaxQtdPecas()}</CardDescription>
@@ -392,7 +390,7 @@ export default function Dashboard() {
 
               <div className="line-1 flex flex-col justify-center gap-8 w-full">
                 <div className="flex justify-center gap-6">
-                  <Card className="rounded-lg border border-border  text-card-foreground shadow-sm flex flex-col w-full max-w-[350px] bg-[#B6CCD8] p-4 border-gray-200 shadow-sm">
+                  <Card className="rounded-lg border border-border  text-card-foreground shadow-sm flex flex-col w-full max-w-[350px] bg-[#E0EAF0] p-4 border-gray-200 shadow-sm">
                     <CardHeader className="items-center pb-0">
                       <CardTitle className="text-center text-blue-600">Quantidade de Peças por cor</CardTitle>
                       <CardDescription className="text-center">{date == undefined ? "Todo o tempo" : `${`${date.getDate()}`.padStart(2, "0")}/${`${date.getMonth() + 1}`.padStart(2, "0")}/${date.getFullYear()}`}</CardDescription>
@@ -441,7 +439,7 @@ export default function Dashboard() {
                   </Card>
                   {!date ? (<div className="flex justify-center max-w-[732px] min-w-[732px]">
                     <div className="flex flex-wrap justify-center gap-6 w-full">
-                    {filter === "all" || filter === "blue" ? (<Card className="rounded-lg border border-border text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#B6CCD8] border-gray-200 shadow-sm">
+                    {filter === "all" || filter === "blue" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
                         <div className="absolute top-0 left-0 w-1/8 h-full bg-[#344BFD] rounded-s-lg"></div>
                         <CardHeader className="items-center w-3/5">
                           <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Azul</CardTitle>
@@ -451,7 +449,7 @@ export default function Dashboard() {
                         </CardContent>
                       </Card>) : ""}
                   
-                      {filter === "all" || filter === "green" ? (<Card className="rounded-lg border border-border text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#B6CCD8] border-gray-200 shadow-sm">
+                      {filter === "all" || filter === "green" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
                         <div className="absolute top-0 left-0 w-1/8 h-full bg-[#2BC84D] rounded-s-lg"></div>
                         <CardHeader className="items-center w-3/5">
                           <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Verde</CardTitle>
@@ -461,7 +459,7 @@ export default function Dashboard() {
                         </CardContent>
                       </Card>) : ""}
                   
-                      {filter === "all" || filter === "red" ? (<Card className="rounded-lg border border-border text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#B6CCD8] border-gray-200 shadow-sm">
+                      {filter === "all" || filter === "red" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
                         <div className="absolute top-0 left-0 w-1/8 h-full bg-[#B10300] rounded-s-lg"></div>
                         <CardHeader className="items-center w-3/5">
                           <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Vermelho</CardTitle>
@@ -471,7 +469,7 @@ export default function Dashboard() {
                         </CardContent>
                       </Card>) : ""}
                   
-                      {filter === "all" || filter === "yellow" ? (<Card className="rounded-lg border border-border text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#B6CCD8] border-gray-200 shadow-sm">
+                      {filter === "all" || filter === "yellow" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
                         <div className="absolute top-0 left-0 w-1/8 h-full bg-[#FFCC00] rounded-s-lg"></div>
                         <CardHeader className="items-center w-3/5">
                           <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Amarelo</CardTitle>
@@ -485,7 +483,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                  <Card className="rounded-lg border border-border bg-[#B6CCD8] text-card-foreground shadow-sm shadow-sm p-4 border-gray-200">
+                  <Card className="rounded-lg border border-border bg-[#E0EAF0] text-card-foreground shadow-sm p-4 border-gray-200">
                     <CardHeader>
                       <CardTitle className="text-blue-600">Últimas Peças</CardTitle>
                       <CardDescription className="text-gray-600">
@@ -519,8 +517,8 @@ export default function Dashboard() {
               </div>
 
               <div className="grid grid-cols-2 gap-8 w-full">
-                {filter === "all" || filter === "blue" ? (<div className="w-full bg-white border-gray-200 rounded-lg shadow-sm">
-                  <div className="border border-gray-200 bg-[#B6CCD8] text-gray-800 shadow-sm w-full p-4 rounded-lg">
+                {filter === "all" || filter === "blue" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
+                  <div className="text-gray-800 w-full p-4 rounded-lg">
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#344BFD" size={40} className="" />
                       <span className="text-[20px]">{pecas.current.filter(peca => peca.Cor === "Azul" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
@@ -540,11 +538,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Azul" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Azul" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Azul" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Azul" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -555,11 +553,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Azul" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Azul" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Azul" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Azul" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -570,11 +568,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Azul" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Azul" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Azul" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Azul" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -584,7 +582,7 @@ export default function Dashboard() {
                   </div>  
                 </div>) : ""}
                 
-                {filter === "all" || filter === "green" ? (<div className="w-full bg-[#B6CCD8] rounded-lg">
+                {filter === "all" || filter === "green" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
                   {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
                   <div className="w-full p-4 rounded-lg">
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
@@ -607,11 +605,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Verde" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Verde" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Verde" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Verde" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -622,11 +620,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Verde" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Verde" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Verde" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Verde" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -637,11 +635,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Verde" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Verde" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Verde" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Verde" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -651,7 +649,7 @@ export default function Dashboard() {
                   </div>
                 </div>) : ""}
 
-                {filter === "all" || filter === "red" ? (<div className="w-full bg-[#B6CCD8] rounded-lg">
+                {filter === "all" || filter === "red" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
                   {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
                   <div className="w-full p-4 rounded-lg">
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
@@ -674,11 +672,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -689,11 +687,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -704,11 +702,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Vermelho" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -718,7 +716,7 @@ export default function Dashboard() {
                   </div>
                 </div>) : ""}
 
-                {filter === "all" || filter === "yellow" ? (<div className="w-full bg-[#B6CCD8] rounded-lg">
+                {filter === "all" || filter === "yellow" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
                   {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
                   <div className="w-full p-4 rounded-lg">
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
@@ -741,11 +739,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -756,11 +754,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -771,11 +769,11 @@ export default function Dashboard() {
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.Cor === "Amarelo" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
