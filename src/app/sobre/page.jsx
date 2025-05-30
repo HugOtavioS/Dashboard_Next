@@ -82,36 +82,36 @@ export default function SobrePage() {
                     <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-105">
                       <div className="w-36 h-36 rounded-full bg-blue-100 mb-4 flex items-center justify-center shadow-md">
                         <span className="text-5xl text-blue-600">
-                          
+                          <img src="assets/hugo.png" alt="Hugo Otávio" className="w-full h-full object-cover rounded-full" />
                         </span>
                       </div>
                       <h3 className="text-xl font-medium text-blue-600">Hugo Otávio</h3>
                       <p className="text-base text-gray-700 text-center mt-2">
-                        Desenvolvedor
+                        Desenvolvedor BackEnd
                       </p>
                     </div>
 
                     <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-105">
                       <div className="w-36 h-36 rounded-full bg-blue-100 mb-4 flex items-center justify-center shadow-md">
                         <span className="text-5xl text-blue-600">
-                          
+                          <img src="assets/misael.png" alt="Misael Morgado" className="w-full h-full object-cover rounded-full" />
                         </span>
                       </div>
                       <h3 className="text-xl font-medium text-blue-600">Misael Morgado</h3>
                       <p className="text-base text-gray-700 text-center mt-2">
-                        Desenvolvedor
+                        Desenvolvedor FrontEnd
                       </p>
                     </div>
 
                     <div className="flex flex-col items-center transform transition-all duration-300 hover:scale-105">
                       <div className="w-36 h-36 rounded-full bg-blue-100 mb-4 flex items-center justify-center shadow-md">
                         <span className="text-5xl text-blue-600">
-                          
+                          <img src="assets/julio.png" alt="Júlio César" className="w-full h-full object-cover rounded-full" />
                         </span>
                       </div>
                       <h3 className="text-xl font-medium text-blue-600">Júlio César</h3>
                       <p className="text-base text-gray-700 text-center mt-2">
-                        Desenvolvedor
+                        Desenvolvedor | Database
                       </p>
                     </div>
                 </div>

@@ -126,7 +126,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    taxa.current = 1;
+    taxa.current = 3;
   }, []);
 
   // Função para adicionar um contato (dados de exemplo)

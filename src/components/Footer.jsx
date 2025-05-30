@@ -23,18 +23,18 @@ export function Footer() {
   const teamMembers = [
     { 
       name: "Hugo Otávio", 
-      github: "https://github.com/membro1", 
-      linkedin: "https://linkedin.com/in/membro1" 
+      github: "https://github.com/HugOtavioS/HugOtavioS", 
+      linkedin: "https://www.linkedin.com/in/hugotavios/" 
     },
     { 
       name: "Misael Morgado", 
-      github: "https://github.com/membro2", 
-      linkedin: "https://linkedin.com/in/membro2" 
+      github: "https://github.com/MisaelBM/MisaelBM", 
+      linkedin: "https://www.linkedin.com/in/misael-bonifacio-morgado-921a7a268/" 
     },
     { 
       name: "Júlio César", 
       github: "https://github.com/membro3", 
-      linkedin: "https://linkedin.com/in/membro3" 
+      linkedin: "https://www.linkedin.com/in/julio-c%C3%A9sar-morais-64b91b159/" 
     },
   ];
 
