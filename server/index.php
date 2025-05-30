@@ -22,7 +22,7 @@ class Api {
 
         self::$start_time = time();
         try {
-            self::$pdo = new PDO("mysql:host=localhost;dbname=db_integrador", "appuser", "appus3rMysql");
+            self::$pdo = new PDO("mysql:host=localhost;dbname=db_prod", "appuser", "appus3rMysql");
             self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo json_encode(["error" => "Database connection failed: " . $e->getMessage()]);
@@ -50,16 +50,16 @@ class Api {
     private static function addpeca() {
         $data = json_decode(file_get_contents("php://input"), true);
 
-        $id_cor = intval($data["id_Cor"] ?? null);
-        $id_tamanho = intval($data["id_Tamanho"] ?? null);
-        $id_material = intval($data["id_Material"] ?? null);
+        $cor = intval($data["id_Cor"] ?? null);
+        $tamanho = intval($data["id_Tamanho"] ?? null);
+        $material = intval($data["id_Material"] ?? null);
         $data_hora = $data["Data_hora"] ?? null;
 
         // try {
-            $stmt = self::$pdo->prepare("INSERT INTO tb_pecas (id_cor, id_tamanho, id_material, data_hora) VALUES (:id_cor, :id_tamanho, :id_material, :data_hora)");
-            $stmt->bindParam(':id_cor', $id_cor);
-            $stmt->bindParam(':id_tamanho', $id_tamanho);
-            $stmt->bindParam(':id_material', $id_material);
+            $stmt = self::$pdo->prepare("INSERT INTO tb_prod (cor, tamanho, material, data_hora) VALUES (:cor, :tamanho, :material, :data_hora)");
+            $stmt->bindParam(':cor', $cor);
+            $stmt->bindParam(':tamanho', $tamanho);
+            $stmt->bindParam(':material', $material);
             $stmt->bindParam(':data_hora', $data_hora);
 
             self::$insert_count++;
@@ -75,7 +75,7 @@ class Api {
 
     private static function getpecas() {
         try {
-            $stmt = self::$pdo->prepare("SELECT tb_pecas.id_peca, tb_cor.Cor, tb_tamanho.Tamanho, tb_material.Material, data_hora FROM tb_pecas INNER JOIN tb_cor ON tb_pecas.id_Cor = tb_cor.id_Cor INNER JOIN tb_tamanho ON tb_pecas.id_Tamanho = tb_tamanho.id_Tamanho INNER JOIN tb_material ON tb_pecas.id_Material = tb_material.id_Material");
+            $stmt = self::$pdo->prepare("SELECT tb_prod.id_prod, tb_cor.cor, tb_tamanho.tamanho, tb_material.material, data_hora FROM tb_prod INNER JOIN tb_cor ON tb_prod.cor = tb_cor.id_cor INNER JOIN tb_tamanho ON tb_prod.tamanho = tb_tamanho.id_tamanho INNER JOIN tb_material ON tb_prod.material = tb_material.id_material");
             $stmt->execute();
             $pecas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
