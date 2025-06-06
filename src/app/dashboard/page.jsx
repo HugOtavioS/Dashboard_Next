@@ -544,28 +544,28 @@ export default function Dashboard() {
                                         <TableCell className="font-medium">#{peca.id_prod}</TableCell>
                                         <TableCell>{peca.cor}</TableCell>
                                         <TableCell>{peca.tamanho}</TableCell>
-                                        <TableCell>{peca.material}{console.log(pecas)}</TableCell>
+                                        <TableCell>{peca.material}</TableCell>
                                       </TableRow>
                                       ) : tamanhoFilter == "pequeno" ? (
                                       <TableRow key={peca.id_prod} className="hover:bg-gray-100">
                                         <TableCell className="font-medium">#{peca.tamanho == 'pequeno' && peca.id_prod}</TableCell>
                                         <TableCell>{peca.tamanho == 'pequeno' && peca.cor}</TableCell>
                                         <TableCell>{peca.tamanho == 'pequeno' && peca.tamanho}</TableCell>
-                                        <TableCell>{peca.tamanho == 'pequeno' && peca.material}{console.log(pecas)}</TableCell>
+                                        <TableCell>{peca.tamanho == 'pequeno' && peca.material}</TableCell>
                                       </TableRow>
                                     ) : tamanhoFilter == "medio" ? (
                                       <TableRow key={peca.id_prod} className="hover:bg-gray-100">
                                         <TableCell className="font-medium">#{peca.tamanho == 'médio' && peca.id_prod}</TableCell>
                                         <TableCell>{peca.tamanho == 'médio' && peca.cor}</TableCell>
                                         <TableCell>{peca.tamanho == 'médio' && peca.tamanho}</TableCell>
-                                        <TableCell>{peca.tamanho == 'médio' && peca.material}{console.log(pecas)}</TableCell>
+                                        <TableCell>{peca.tamanho == 'médio' && peca.material}</TableCell>
                                       </TableRow>
                                     ) : tamanhoFilter == "grande" ? (
                                       <TableRow key={peca.id_prod} className="hover:bg-gray-100">
                                         <TableCell className="font-medium">#{peca.tamanho == 'grande' && peca.id_prod}</TableCell>
                                         <TableCell>{peca.tamanho == 'grande' && peca.cor}</TableCell>
                                         <TableCell>{peca.tamanho == 'grande' && peca.tamanho}</TableCell>
-                                        <TableCell>{peca.tamanho == 'grande' && peca.material}{console.log(pecas)}</TableCell>
+                                        <TableCell>{peca.tamanho == 'grande' && peca.material}</TableCell>
                                       </TableRow>
                                     ) : ""
                                   ) : materialFilter == "metal" ? (
@@ -573,14 +573,14 @@ export default function Dashboard() {
                                     <TableCell className="font-medium">#{peca.material == 'metal' && peca.id_prod}</TableCell>
                                     <TableCell>{peca.material == 'metal' && peca.cor}</TableCell>
                                     <TableCell>{peca.material == 'metal' && peca.tamanho}</TableCell>
-                                    <TableCell>{peca.material == 'metal' && peca.material}{console.log(pecas)}</TableCell>
+                                    <TableCell>{peca.material == 'metal' && peca.material}</TableCell>
                                   </TableRow>
                                   ) : materialFilter == "plastico" ? (
                                   <TableRow key={peca.id_prod} className="hover:bg-gray-100">
                                     <TableCell className="font-medium">#{peca.material == 'plástico' && peca.id_prod}</TableCell>
                                     <TableCell>{peca.material == 'plástico' && peca.cor}</TableCell>
                                     <TableCell>{peca.material == 'plástico' && peca.tamanho}</TableCell>
-                                    <TableCell>{peca.material == 'plástico' && peca.material}{console.log(pecas)}</TableCell>
+                                    <TableCell>{peca.material == 'plástico' && peca.material}</TableCell>
                                   </TableRow>
                                   ) : ""
                                 ) : colorFilter === "blue" ? (
@@ -588,28 +588,28 @@ export default function Dashboard() {
                                     <TableCell className="font-medium">#{peca.cor == 'azul' && peca.id_prod}</TableCell>
                                     <TableCell>{peca.cor == 'azul' && peca.cor}</TableCell>
                                     <TableCell>{peca.cor == 'azul' && peca.tamanho}</TableCell>
-                                    <TableCell>{peca.cor == 'azul' && peca.material}{console.log(pecas)}</TableCell>
+                                    <TableCell>{peca.cor == 'azul' && peca.material}</TableCell>
                                   </TableRow>
                                 ) : colorFilter === "green" ? (
                                   <TableRow key={peca.id_prod} className="hover:bg-gray-100">
                                     <TableCell className="font-medium">#{peca.cor == 'verde' && peca.id_prod}</TableCell>
                                     <TableCell>{peca.cor == 'verde' && peca.cor}</TableCell>
                                     <TableCell>{peca.cor == 'verde' && peca.tamanho}</TableCell>
-                                    <TableCell>{peca.cor == 'verde' && peca.material}{console.log(pecas)}</TableCell>
+                                    <TableCell>{peca.cor == 'verde' && peca.material}</TableCell>
                                   </TableRow>
                                 ) : colorFilter === "red" ? (
                                   <TableRow key={peca.id_prod} className="hover:bg-gray-100">
                                     <TableCell className="font-medium">#{peca.cor == 'vermelho' && peca.id_prod}</TableCell>
                                     <TableCell>{peca.cor == 'vermelho' && peca.cor}</TableCell>
                                     <TableCell>{peca.cor == 'vermelho' && peca.tamanho}</TableCell>
-                                    <TableCell>{peca.cor == 'vermelho' && peca.material}{console.log(pecas)}</TableCell>
+                                    <TableCell>{peca.cor == 'vermelho' && peca.material}</TableCell>
                                   </TableRow>
                                 ) : colorFilter === "yellow" ? (
                                   <TableRow key={peca.id_prod} className="hover:bg-gray-100">
                                     <TableCell className="font-medium">#{peca.cor == 'amarelo' && peca.id_prod}</TableCell>
                                     <TableCell>{peca.cor == 'amarelo' && peca.cor}</TableCell>
                                     <TableCell>{peca.cor == 'amarelo' && peca.tamanho}</TableCell>
-                                    <TableCell>{peca.cor == 'amarelo' && peca.material}{console.log(pecas)}</TableCell>
+                                    <TableCell>{peca.cor == 'amarelo' && peca.material}</TableCell>
                                   </TableRow>
                                 ) : ""}
                               </>
