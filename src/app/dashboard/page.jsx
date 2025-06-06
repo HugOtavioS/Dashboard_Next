@@ -63,7 +63,9 @@ export default function Dashboard() {
   const [averageNew, setAverageNew] = useState(0);
   const taxa = useRef(0);
   const indexPecaMax = useRef(0);
-  const [filter, setFilter] = useState("all");
+  const [colorFilter, setColorFilter] = useState("all");
+  const [materialFilter, setMaterialFilter] = useState("all");
+  const [tamanhoFilter, setTamanhoFilter] = useState("all");
   const [date, setDate] = useState();
 
   // Usando refs para manter os valores atualizados
@@ -148,7 +150,6 @@ export default function Dashboard() {
         },
         withCredentials: false
       });
-
     } catch (error) {
       console.error("Erro ao adicionar contato:", error);
     }
@@ -170,7 +171,6 @@ export default function Dashboard() {
 
         const data = await response.json();
         pecas.current = data;
-        
         // Chama a função de cálculo das estatísticas passando o total atual de registros
         calculateStatistics(data.length);
         calculateStatisticsByColor(data);
@@ -275,15 +275,24 @@ export default function Dashboard() {
     firstGetPecas();
     getPecas();
 
-    const addInterval = setInterval(() => {
-      getMaxQtdPecas();
-      getPecas();  
-      addPeca();
+    const addInterval = setInterval(async() => {
+      await addPeca();
+      await getMaxQtdPecas();
+      await getPecas();
       updateChartData();
     }, `${taxa.current * 1000}`);
 
     return () => clearInterval(addInterval);
   }, [date]);
+
+  // useEffect(() => {
+
+  //   const addInterval = setInterval(async() => {
+  //     await addPeca();
+  //   }, 1000);
+
+  //   return () => clearInterval(addInterval);
+  // }, [date]);
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 text-gray-800">
@@ -300,14 +309,13 @@ export default function Dashboard() {
           
           <main className="w-full h-full py-12 px-12">
             <div className="chart-1 flex flex-col gap-16 justify-center w-full h-max">
-            <div className="flex justify-center gap-8 w-fit absolute top-4 right-4">
-                <Card className="flex flex-col gap-4 w-full">
+              <div className="flex justify-center gap-8 w-full">
+                <Card className="flex justify-center gap-4 w-full">
                   <CardContent className="relative flex items-center text-[16px] font-semibold text-center bg-[#4D648D] py-8 rounded-lg text-white p-5">
-                    <div className="flex justify-center flex-col gap-3 w-full">
-                      <div className="flex items-center w-full">
-                        <h3>Filtro de cor: </h3>
-                        <Separator orientation="vertical" className="mx-4" />
-                        <Select onValueChange={setFilter} defaultValue="all">
+                    <div className="flex justify-center gap-3 w-full">
+                      <div className="flex gap-1 justify-between items-center w-full">
+                        <h3>Cor: </h3>
+                        <Select onValueChange={setColorFilter} defaultValue="all">
                           <SelectTrigger className="border-black w-[180px] bg-white text-black">
                             <SelectValue placeholder="Filtro de cor" />
                           </SelectTrigger>
@@ -320,9 +328,35 @@ export default function Dashboard() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="flex items-center w-full">
-                        <h3>Filtro de data: </h3>
-                        <Separator orientation="vertical" className="mx-3" />
+                      <div className="flex gap-1 justify-between items-center w-full">
+                        <h3>Material: </h3>
+                        <Select onValueChange={setMaterialFilter} defaultValue="all">
+                          <SelectTrigger className="border-black w-[180px] bg-white text-black">
+                            <SelectValue placeholder="Filtro de cor" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white text-black">
+                            <SelectItem value="all">Todos</SelectItem>
+                            <SelectItem value="metal">Metal</SelectItem>
+                            <SelectItem value="plastico">Plástico</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex gap-1 justify-between items-center w-full">
+                        <h3>Tamanho: </h3>
+                        <Select onValueChange={setTamanhoFilter} defaultValue="all">
+                          <SelectTrigger className="border-black w-[180px] bg-white text-black">
+                            <SelectValue placeholder="Filtro de cor" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white text-black">
+                            <SelectItem value="all">Todos</SelectItem>
+                            <SelectItem value="pequeno">Pequeno</SelectItem>
+                            <SelectItem value="medio">Médio</SelectItem>
+                            <SelectItem value="grande">Grande</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex gap-1 justify-start items-center w-full">
+                        <h3>Data: </h3>
                         <Popover>
                           <PopoverTrigger asChild className="border-black w-[180px] bg-white text-black">
                             <Button
@@ -347,9 +381,7 @@ export default function Dashboard() {
                         </Popover>
                       </div>
                     </div>
-                    </CardContent>
-                  <CardFooter className="grid grid-cols-2 grid-rows-2 gap-2 text-sm">
-                  </CardFooter>
+                  </CardContent>
                 </Card>
               </div>
               <div className="flex gap-12 justify-center items-end w-full mx-auto m-10">
@@ -368,7 +400,7 @@ export default function Dashboard() {
 
                 <Card className="rounded-lg border border-border bg-card text-card-foreground flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200">
                   <CardHeader className="items-center pb-0">
-                    <CardTitle className="te4text-blue-600">Taxa Média</CardTitle>
+                    <CardTitle className="te4text-blue-600">Taxa Média Total</CardTitle>
                     <CardDescription className="text-center text-gray-600">Peças por segundo</CardDescription>
                   </CardHeader>
                   <CardContent className="relative flex items-center text-[32px] font-semibold text-center px-6 rounded-lg text-gray-800">
@@ -376,7 +408,7 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
 
-                {filter === "all" ? (<Card className="rounded-lg border border-border bg-card text-card-foreground flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200">
+                {colorFilter === "all" ? (<Card className="rounded-lg border border-border bg-card text-card-foreground flex flex-col gap-5 w-full max-w-[350px] bg-white border-gray-200">
                   <CardHeader className="items-center pb-0">
                     <CardTitle className="te4text-blue-600">Cor Predominante</CardTitle>
                     <CardDescription className="text-center text-gray-600">{getMaxQtdPecas()}</CardDescription>
@@ -439,7 +471,7 @@ export default function Dashboard() {
                   </Card>
                   {!date ? (<div className="flex justify-center max-w-[732px] min-w-[732px]">
                     <div className="flex flex-wrap justify-center gap-6 w-full">
-                    {filter === "all" || filter === "blue" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
+                    {colorFilter === "all" || colorFilter === "blue" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
                         <div className="absolute top-0 left-0 w-1/8 h-full bg-[#344BFD] rounded-s-lg"></div>
                         <CardHeader className="items-center w-3/5">
                           <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Azul</CardTitle>
@@ -449,7 +481,7 @@ export default function Dashboard() {
                         </CardContent>
                       </Card>) : ""}
                   
-                      {filter === "all" || filter === "green" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
+                      {colorFilter === "all" || colorFilter === "green" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
                         <div className="absolute top-0 left-0 w-1/8 h-full bg-[#2BC84D] rounded-s-lg"></div>
                         <CardHeader className="items-center w-3/5">
                           <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Verde</CardTitle>
@@ -459,7 +491,7 @@ export default function Dashboard() {
                         </CardContent>
                       </Card>) : ""}
                   
-                      {filter === "all" || filter === "red" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
+                      {colorFilter === "all" || colorFilter === "red" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
                         <div className="absolute top-0 left-0 w-1/8 h-full bg-[#B10300] rounded-s-lg"></div>
                         <CardHeader className="items-center w-3/5">
                           <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Vermelho</CardTitle>
@@ -469,7 +501,7 @@ export default function Dashboard() {
                         </CardContent>
                       </Card>) : ""}
                   
-                      {filter === "all" || filter === "yellow" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
+                      {colorFilter === "all" || colorFilter === "yellow" ? (<Card className="rounded-lg text-card-foreground shadow-sm relative flex flex-col items-center w-[350px] h-[200px] bg-[#E0EAF0] border-gray-200">
                         <div className="absolute top-0 left-0 w-1/8 h-full bg-[#FFCC00] rounded-s-lg"></div>
                         <CardHeader className="items-center w-3/5">
                           <CardTitle className="text-center text-gray-800">Peças por Segundo <hr className="border-gray-300 my-1"></hr> Amarelo</CardTitle>
@@ -485,7 +517,7 @@ export default function Dashboard() {
                 <div className="flex flex-col gap-4">
                   <Card className="rounded-lg border border-border bg-[#E0EAF0] text-card-foreground shadow-sm p-4 border-gray-200">
                     <CardHeader>
-                      <CardTitle className="text-blue-600">Últimas Peças</CardTitle>
+                      <CardTitle className="text-blue-600">Últimas 10 Peças</CardTitle>
                       <CardDescription className="text-gray-600">
                         Registro das peças mais recentes
                       </CardDescription>
@@ -501,15 +533,88 @@ export default function Dashboard() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {console.log(pecas.current)}
-                          {pecas.current.slice(-10).reverse().map((peca) => (
-                            <TableRow key={peca.id} className="hover:bg-gray-100">
-                              <TableCell className="font-medium">#{peca.id}</TableCell>
-                              <TableCell>{peca.cor}</TableCell>
-                              <TableCell>{peca.tamanho}</TableCell>
-                              <TableCell>{peca.material}</TableCell>
-                            </TableRow>
-                          ))}
+                          {[...pecas.current]
+                            .sort((a, b) => b.id_prod - a.id_prod)
+                            .map((peca) => (
+                              <>
+                                {colorFilter === "all" ? (
+                                  materialFilter == "all" ? (
+                                    tamanhoFilter == "all" ? (
+                                      <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                        <TableCell className="font-medium">#{peca.id_prod}</TableCell>
+                                        <TableCell>{peca.cor}</TableCell>
+                                        <TableCell>{peca.tamanho}</TableCell>
+                                        <TableCell>{peca.material}{console.log(pecas)}</TableCell>
+                                      </TableRow>
+                                      ) : tamanhoFilter == "pequeno" ? (
+                                      <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                        <TableCell className="font-medium">#{peca.tamanho == 'pequeno' && peca.id_prod}</TableCell>
+                                        <TableCell>{peca.tamanho == 'pequeno' && peca.cor}</TableCell>
+                                        <TableCell>{peca.tamanho == 'pequeno' && peca.tamanho}</TableCell>
+                                        <TableCell>{peca.tamanho == 'pequeno' && peca.material}{console.log(pecas)}</TableCell>
+                                      </TableRow>
+                                    ) : tamanhoFilter == "medio" ? (
+                                      <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                        <TableCell className="font-medium">#{peca.tamanho == 'médio' && peca.id_prod}</TableCell>
+                                        <TableCell>{peca.tamanho == 'médio' && peca.cor}</TableCell>
+                                        <TableCell>{peca.tamanho == 'médio' && peca.tamanho}</TableCell>
+                                        <TableCell>{peca.tamanho == 'médio' && peca.material}{console.log(pecas)}</TableCell>
+                                      </TableRow>
+                                    ) : tamanhoFilter == "grande" ? (
+                                      <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                        <TableCell className="font-medium">#{peca.tamanho == 'grande' && peca.id_prod}</TableCell>
+                                        <TableCell>{peca.tamanho == 'grande' && peca.cor}</TableCell>
+                                        <TableCell>{peca.tamanho == 'grande' && peca.tamanho}</TableCell>
+                                        <TableCell>{peca.tamanho == 'grande' && peca.material}{console.log(pecas)}</TableCell>
+                                      </TableRow>
+                                    ) : ""
+                                  ) : materialFilter == "metal" ? (
+                                  <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                    <TableCell className="font-medium">#{peca.material == 'metal' && peca.id_prod}</TableCell>
+                                    <TableCell>{peca.material == 'metal' && peca.cor}</TableCell>
+                                    <TableCell>{peca.material == 'metal' && peca.tamanho}</TableCell>
+                                    <TableCell>{peca.material == 'metal' && peca.material}{console.log(pecas)}</TableCell>
+                                  </TableRow>
+                                  ) : materialFilter == "plastico" ? (
+                                  <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                    <TableCell className="font-medium">#{peca.material == 'plástico' && peca.id_prod}</TableCell>
+                                    <TableCell>{peca.material == 'plástico' && peca.cor}</TableCell>
+                                    <TableCell>{peca.material == 'plástico' && peca.tamanho}</TableCell>
+                                    <TableCell>{peca.material == 'plástico' && peca.material}{console.log(pecas)}</TableCell>
+                                  </TableRow>
+                                  ) : ""
+                                ) : colorFilter === "blue" ? (
+                                  <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                    <TableCell className="font-medium">#{peca.cor == 'azul' && peca.id_prod}</TableCell>
+                                    <TableCell>{peca.cor == 'azul' && peca.cor}</TableCell>
+                                    <TableCell>{peca.cor == 'azul' && peca.tamanho}</TableCell>
+                                    <TableCell>{peca.cor == 'azul' && peca.material}{console.log(pecas)}</TableCell>
+                                  </TableRow>
+                                ) : colorFilter === "green" ? (
+                                  <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                    <TableCell className="font-medium">#{peca.cor == 'verde' && peca.id_prod}</TableCell>
+                                    <TableCell>{peca.cor == 'verde' && peca.cor}</TableCell>
+                                    <TableCell>{peca.cor == 'verde' && peca.tamanho}</TableCell>
+                                    <TableCell>{peca.cor == 'verde' && peca.material}{console.log(pecas)}</TableCell>
+                                  </TableRow>
+                                ) : colorFilter === "red" ? (
+                                  <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                    <TableCell className="font-medium">#{peca.cor == 'vermelho' && peca.id_prod}</TableCell>
+                                    <TableCell>{peca.cor == 'vermelho' && peca.cor}</TableCell>
+                                    <TableCell>{peca.cor == 'vermelho' && peca.tamanho}</TableCell>
+                                    <TableCell>{peca.cor == 'vermelho' && peca.material}{console.log(pecas)}</TableCell>
+                                  </TableRow>
+                                ) : colorFilter === "yellow" ? (
+                                  <TableRow key={peca.id_prod} className="hover:bg-gray-100">
+                                    <TableCell className="font-medium">#{peca.cor == 'amarelo' && peca.id_prod}</TableCell>
+                                    <TableCell>{peca.cor == 'amarelo' && peca.cor}</TableCell>
+                                    <TableCell>{peca.cor == 'amarelo' && peca.tamanho}</TableCell>
+                                    <TableCell>{peca.cor == 'amarelo' && peca.material}{console.log(pecas)}</TableCell>
+                                  </TableRow>
+                                ) : ""}
+                              </>
+                          )).slice(0, 10)
+                          }
                         </TableBody>
                       </Table>
                     </CardContent>
@@ -518,11 +623,11 @@ export default function Dashboard() {
               </div>
 
               <div className="grid grid-cols-2 gap-8 w-full">
-                {filter === "all" || filter === "blue" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
+                {colorFilter === "all" || colorFilter === "blue" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
                   <div className="text-gray-800 w-full p-4 rounded-lg">
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#344BFD" size={40} className="" />
-                      <span className="text-[20px]">{pecas.current.filter(peca => peca.cor === "Azul" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
+                      <span className="text-[20px]">{pecas.current.filter(peca => peca.cor === "azul" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
                     </div>
                       <Table>
                         <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -533,63 +638,63 @@ export default function Dashboard() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow>
-                            <TableCell className="font-medium">P</TableCell>
+                          {(tamanhoFilter == 'pequeno' && pecas.current.filter(peca => (peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Pequeno</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Azul" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "azul" && peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Azul" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "azul" && peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="font-medium">M</TableCell>
+                          </TableRow>) : ""}
+                          {(tamanhoFilter == 'medio' && pecas.current.filter(peca => (peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Médio</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Azul" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "azul" && peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Azul" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "azul" && peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="font-medium">G</TableCell>
+                          </TableRow>) : ""}
+                          {(tamanhoFilter == 'grande' && pecas.current.filter(peca => (peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Grande</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Azul" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "azul" && peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Azul" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "azul" && peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
+                          </TableRow>) : ""}
                         </TableBody>
                       </Table>
                   </div>  
                 </div>) : ""}
                 
-                {filter === "all" || filter === "green" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
+                {colorFilter === "all" || colorFilter === "green" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
                   {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
                   <div className="w-full p-4 rounded-lg">
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#2BC84D" size={40} className="" />
-                      <span className="text-[20px]">{pecas.current.filter(peca => peca.cor === "Verde" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
+                      <span className="text-[20px]">{pecas.current.filter(peca => peca.cor === "verde" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
                     </div>
                       <Table>
                         <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -600,63 +705,63 @@ export default function Dashboard() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow>
-                            <TableCell className="font-medium">P</TableCell>
+                          {(tamanhoFilter == 'pequeno' && pecas.current.filter(peca => (peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Pequeno</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Verde" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "verde" && peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Verde" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "verde" && peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="font-medium">M</TableCell>
+                          </TableRow>) : ""}
+                          {(tamanhoFilter == 'medio' && pecas.current.filter(peca => (peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Médio</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Verde" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "verde" && peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Verde" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "verde" && peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="font-medium">G</TableCell>
+                          </TableRow>) : ""}
+                          {(tamanhoFilter == 'grande' && pecas.current.filter(peca => (peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Grande</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Verde" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "verde" && peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Verde" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "verde" && peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
+                          </TableRow>) : ""}
                         </TableBody>
                       </Table>
                   </div>
                 </div>) : ""}
 
-                {filter === "all" || filter === "red" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
+                {colorFilter === "all" || colorFilter === "red" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
                   {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
                   <div className="w-full p-4 rounded-lg">
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#B10300" size={40} className="" />
-                      <span className="text-[20px]">{pecas.current.filter(peca => peca.cor === "Vermelho" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
+                      <span className="text-[20px]">{pecas.current.filter(peca => peca.cor === "vermelho" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
                     </div>
                       <Table>
                         <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -667,63 +772,63 @@ export default function Dashboard() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow>
-                            <TableCell className="font-medium">P</TableCell>
+                          {(tamanhoFilter == 'pequeno' && pecas.current.filter(peca => (peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Pequeno</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Vermelho" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "vermelho" && peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Vermelho" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "vermelho" && peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="font-medium">M</TableCell>
+                          </TableRow>) : ""}
+                          {(tamanhoFilter == 'medio' && pecas.current.filter(peca => (peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Médio</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Vermelho" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "vermelho" && peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Vermelho" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "vermelho" && peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="font-medium">G</TableCell>
+                          </TableRow>) : ""}
+                          {(tamanhoFilter == 'grande' && pecas.current.filter(peca => (peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Grande</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Vermelho" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "vermelho" && peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Vermelho" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "vermelho" && peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
+                          </TableRow>) : ""}
                         </TableBody>
                       </Table>
                   </div>
                 </div>) : ""}
 
-                {filter === "all" || filter === "yellow" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
+                {colorFilter === "all" || colorFilter === "yellow" ? (<div className="w-full bg-[#E0EAF0] shadow-sm rounded-lg">
                   {/* <div className="w-full h-[48px] bg-[#B10300] rounded-t-xl"></div> */}
                   <div className="w-full p-4 rounded-lg">
                     {/* <h1 className="text-center text-[24px] font-semibold py-4">Vermelho</h1> */}
                     <div className="flex justify-center items-center gap-2 py-4 w-max mx-auto">
                       <Database color="#FFCC00" size={40} className="" />
-                      <span className="text-[20px]">{pecas.current.filter(peca => peca.cor === "Amarelo" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
+                      <span className="text-[20px]">{pecas.current.filter(peca => peca.cor === "amarelo" && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</span>
                     </div>
                       <Table>
                         <TableCaption>Tamanho, quantidade total e por material</TableCaption>
@@ -734,51 +839,51 @@ export default function Dashboard() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow>
-                            <TableCell className="font-medium">P</TableCell>
+                          {(tamanhoFilter == 'pequeno' && pecas.current.filter(peca => (peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Pequeno</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Amarelo" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "amarelo" && peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Amarelo" && peca.Tamanho === "P") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "amarelo" && peca.tamanho === "pequeno") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="font-medium">M</TableCell>
+                          </TableRow>) : ""}
+                          {(tamanhoFilter == 'medio' && pecas.current.filter(peca => (peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Médio</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Amarelo" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "amarelo" && peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Amarelo" && peca.Tamanho === "M") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "amarelo" && peca.tamanho === "médio") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="font-medium">G</TableCell>
+                          </TableRow>) : ""}
+                          {(tamanhoFilter == 'grande' && pecas.current.filter(peca => (peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`))) || tamanhoFilter == "all" ? (<TableRow>
+                            <TableCell className="font-medium">Grande</TableCell>
                             <Table>
                               <TableBody>
                                 <TableRow>
                                   <TableCell className="font-medium">Aço</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Metalico" && peca.cor === "Amarelo" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "metal" && peca.cor === "amarelo" && peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell className="font-medium">Plástico</TableCell>
-                                  <TableCell className="font-medium max-w-8">{pecas.current.filter(peca => (peca.Material === "Não Metalico" && peca.cor === "Amarelo" && peca.Tamanho === "G") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
+                                  <TableCell className="font-medium min-w-14 max-w-14">{pecas.current.filter(peca => (peca.material === "plástico" && peca.cor === "amarelo" && peca.tamanho === "grande") && (!date || `${peca.data_hora}`.split(" ")[0] == `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, "0")}-${`${date.getDate()}`.padStart(2, "0")}`)).length}</TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
-                          </TableRow>
+                          </TableRow>) : ""}
                         </TableBody>
                       </Table>
                   </div>

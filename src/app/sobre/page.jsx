@@ -131,7 +131,7 @@ export default function SobrePage() {
               </CardHeader>
               <CardContent className="prose max-w-none text-lg p-6 pb-8">
                 <p className="text-gray-700 leading-relaxed">
-                  Este é um projeto integrador desenvolvido pelos alunos do curso de Análise e Desenvolvimento de Sistemas do SENAI. 
+                  Este é um projeto integrador desenvolvido pelos alunos Hugo Otávio, Júlio César e Misael Bonifácio do curso de Análise e Desenvolvimento de Sistemas do SENAI. 
                   O objetivo principal é aplicar os conhecimentos adquiridos durante o curso em um projeto prático que soluciona 
                   problemas reais, proporcionando uma experiência alinhada com as demandas do mercado de trabalho.
                 </p>
@@ -143,10 +143,8 @@ export default function SobrePage() {
                 </p>
                 
                 <p className="text-gray-700 leading-relaxed mt-6">
-                  Nossa solução foi pensada para atender às necessidades específicas do cliente, proporcionando uma 
-                  experiência de usuário agradável e funcional. O sistema conta com recursos de autenticação, 
-                  visualização de dados em tempo real e geração de relatórios, facilitando a interpretação de informações 
-                  complexas através de uma interface amigável.
+                  Nossa solução foi pensada para atender às necessidades objetivos propostos, proporcionando uma 
+                  experiência de usuário agradável e funcional. O sistema conta com recursos de visualização de dados em tempo real, facilitando a interpretação de informações complexas através de uma interface amigável.
                 </p>
               </CardContent>
             </Card>

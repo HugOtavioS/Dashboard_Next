@@ -1,7 +1,6 @@
 import * as React from "react"
 
-import { SearchForm } from "@/components/search-form"
-import { VersionSwitcher } from "@/components/version-switcher"
+import Image from "next/image";
 import {
   Sidebar,
   SidebarContent,
@@ -35,123 +34,8 @@ const data = {
           title: "Sobre o Projeto",
           url: "/sobre",
         },
-        {
-          title: "Login",
-          url: "/login",
-        },
       ],
     },
-    // {
-    //   title: "Building Your Application",
-    //   url: "#",
-    //   items: [
-    //     {
-    //       title: "Routing",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Data Fetching",
-    //       url: "#",
-    //       isActive: true,
-    //     },
-    //     {
-    //       title: "Rendering",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Caching",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Styling",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Optimizing",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Configuring",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Testing",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Authentication",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Deploying",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Upgrading",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Examples",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: "API Reference",
-    //   url: "#",
-    //   items: [
-    //     {
-    //       title: "Components",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "File Conventions",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Functions",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "next.config.js Options",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "CLI",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Edge Runtime",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: "Architecture",
-    //   url: "#",
-    //   items: [
-    //     {
-    //       title: "Accessibility",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Fast Refresh",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Next.js Compiler",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Supported Browsers",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Turbopack",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
   ],
 }
 
@@ -160,13 +44,17 @@ export function AppSidebar({
 }) {
   return (
     <Sidebar className="bg-gray-50 border-r border-gray-200" {...props}>
-      <SidebarHeader className="bg-gray-100">
-        <VersionSwitcher 
-          versions={data.versions} 
-          defaultVersion={data.versions[1]}
-          className="bg-white border-gray-200 text-blue-600" 
-        />
-        <SearchForm className="bg-white border-gray-200" />
+      <SidebarHeader className="">
+        <div className="w-fit">
+          <Image 
+            src="/senai-logo-2.png" 
+            alt="Logo SENAI" 
+            width={100} 
+            height={100}
+            className="mx-auto"
+            priority
+          />
+        </div>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}

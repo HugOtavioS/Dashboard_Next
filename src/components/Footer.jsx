@@ -68,10 +68,6 @@ export function Footer() {
                   </svg>
                   <span>Dashboard</span>
                 </Link>
-                <Link href="/login" className="flex w-fit px-4 items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors">
-                  <User className="h-5 w-5" />
-                  <span>Login</span>
-                </Link>
               {/* </div> */}
             </div>
           </div>
