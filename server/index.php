@@ -3,7 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 header("Content-Type: application/json");
-// echo json_encode(["message" => "Hello, World!"]);
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -32,7 +32,8 @@ class Api {
 
     public static function handleRequest() {
         $url = $_SERVER["REQUEST_URI"];
-        $uri = explode("?", $url)[1];
+        $uri = explode("/", $url)[1];
+        $uri = explode("?", $uri)[0];
 
         switch ($uri) {
             case "addpeca":
@@ -55,27 +56,46 @@ class Api {
         $material = intval($data["id_Material"] ?? null);
         $data_hora = $data["Data_hora"] ?? null;
 
-        // try {
-            $stmt = self::$pdo->prepare("INSERT INTO tb_prod (cor, tamanho, material, data_hora) VALUES (:cor, :tamanho, :material, :data_hora)");
-            $stmt->bindParam(':cor', $cor);
-            $stmt->bindParam(':tamanho', $tamanho);
-            $stmt->bindParam(':material', $material);
-            $stmt->bindParam(':data_hora', $data_hora);
+        $stmt = self::$pdo->prepare("INSERT INTO tb_prod (cor, tamanho, material, data_hora) VALUES (:cor, :tamanho, :material, :data_hora)");
+        $stmt->bindParam(':cor', $cor);
+        $stmt->bindParam(':tamanho', $tamanho);
+        $stmt->bindParam(':material', $material);
+        $stmt->bindParam(':data_hora', $data_hora);
 
-            self::$insert_count++;
-            if ($stmt->execute()) {
-                echo json_encode(["message" => "Record inserted successfully"]);
-            } else {
-                echo json_encode(["message" => "Failed to insert record"]);
-            }
-        // } catch (PDOException $e) {
-        //     echo json_encode(["error" => $e->getMessage()]);
-        // }
+        self::$insert_count++;
+        if ($stmt->execute()) {
+            echo json_encode(["message" => "Record inserted successfully"]);
+        } else {
+            echo json_encode(["message" => "Failed to insert record"]);
+        }
     }
 
     private static function getpecas() {
         try {
-            $stmt = self::$pdo->prepare("SELECT tb_prod.id_prod, tb_cor.cor, tb_tamanho.tamanho, tb_material.material, data_hora FROM tb_prod INNER JOIN tb_cor ON tb_prod.cor = tb_cor.id_cor INNER JOIN tb_tamanho ON tb_prod.tamanho = tb_tamanho.id_tamanho INNER JOIN tb_material ON tb_prod.material = tb_material.id_material");
+            $filters = explode("?", $_SERVER["REQUEST_URI"])[1];
+            $filters = explode("&", $filters);
+            $values = [];
+
+            foreach ($filters as $key => $value) {
+                $valores = explode("=", $value);
+                $values[$valores[0]] = $valores[1];
+            }
+
+            $query = "SELECT tb_prod.id_prod, tb_cor.cor, tb_tamanho.tamanho, tb_material.material, data_hora FROM tb_prod INNER JOIN tb_cor ON tb_prod.cor = tb_cor.id_cor INNER JOIN tb_tamanho ON tb_prod.tamanho = tb_tamanho.id_tamanho INNER JOIN tb_material ON tb_prod.material = tb_material.id_material";
+
+            if (count($values) > 1) {
+                $query .= " WHERE ";
+                $conditions = [];
+                
+                foreach ($values as $key => $value) {
+                    $conditions[] = "tb_$key.$key = '$value'";
+                }
+
+                $query .= implode(" AND ", $conditions);
+            }
+
+            $stmt = self::$pdo->prepare($query);
+
             $stmt->execute();
             $pecas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
